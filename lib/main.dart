@@ -22,6 +22,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
+enum FilterOptions {all, done, undone}
+
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title, @required this.cardManager}) : super(key: key);
 
@@ -34,8 +36,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  void _onSortButtonPressed() {
-    print('Sort button pressed (not functional)');
+  void _onFilterButtonPressed(selection) {
+    print('Filter $selection (not functional)');
   }
 
   @override
@@ -44,6 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
+          //En knapp för att komma in i en annan vy som egentligen inte är relevant för uppgiftens specifikationer
           IconButton(icon: Icon(Icons.remove_red_eye), onPressed: () {
             Navigator.push(
               context,
@@ -51,11 +54,27 @@ class _MyHomePageState extends State<MyHomePage> {
             );
           }),
           IconButton(icon: Icon(Icons.refresh), onPressed: () {
-            print('Refresh list of todo cards');
+            print('Refresh list of todo cards (not functional)');
           }),
-          IconButton(
+          PopupMenuButton(
             icon: Icon(Icons.sort),
-            onPressed: _onSortButtonPressed,
+            onSelected: (FilterOptions result) { 
+              _onFilterButtonPressed(result);
+            },
+            itemBuilder: (context) => <PopupMenuEntry<FilterOptions>> [
+              const PopupMenuItem<FilterOptions>(
+                value: FilterOptions.all,
+                child: Text("All")
+              ),
+              const PopupMenuItem<FilterOptions>(
+                value: FilterOptions.done,
+                child: Text("Done")
+              ),
+              const PopupMenuItem<FilterOptions>(
+                value: FilterOptions.undone,
+                child: Text("Undone")
+              )
+            ]
           )
         ],
       ),
@@ -72,6 +91,8 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+
+  //ListView som hämtar element från gushenrfa/cards genom en CardManager
   ListView _todoListView() {
     return ListView.separated(
       itemBuilder: (context, index) => widget.cardManager.getCards()[index],

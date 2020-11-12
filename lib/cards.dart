@@ -62,7 +62,7 @@ class _TodoCardState extends State<TodoCard> {
   }
 }
 
-//CardManager håller koll på alla todo cards och alla relevanta metoder i samband med dem (get/add/delete/save/etc)
+//CardManager håller koll på alla todo cards i scope och alla relevanta metoder i samband med dem (get/add/delete/save/etc)
 class CardManager {
 
   CardManager({todoCards}) {

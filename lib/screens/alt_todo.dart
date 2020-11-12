@@ -1,5 +1,14 @@
+/*
+
+En alternativ vy som inte nödvändigtvis är relevant för uppgiftens specifikationer
+- Återanvänder gushenrfa/cards
+
+*/
+
 import 'package:flutter/material.dart';
 import 'package:gushenrfa/cards.dart';
+
+enum FilterOptions {all, done, undone}
 
 class AltTodoScreen extends StatefulWidget {
   AltTodoScreen(this.cardManager);
@@ -17,8 +26,8 @@ class _AltTodoScreenState extends State<AltTodoScreen> {
     widget.cardManager.addCard('title');
   }
 
-  void _onSortButtonPressed() {
-    print('Sort button pressed (not functional)');
+  void _onFilterButtonPressed(selection) {
+    print('Filter $selection (not functional)');
   }
 
   @override
@@ -118,11 +127,26 @@ class _AltTodoScreenState extends State<AltTodoScreen> {
                           FlatButton(
                             onPressed: null,  
                             child: Icon(Icons.refresh)),
-                          FlatButton(
-                            onPressed: _onSortButtonPressed,
-                            color: Colors.transparent,
-                            child: Icon(Icons.sort, size: 36,)
-                          ),
+                          PopupMenuButton(
+                            icon: Icon(Icons.sort),
+                            onSelected: (FilterOptions result) { 
+                              _onFilterButtonPressed(result);
+                            },
+                            itemBuilder: (context) => <PopupMenuEntry<FilterOptions>> [
+                              const PopupMenuItem<FilterOptions>(
+                                value: FilterOptions.all,
+                                child: Text("All")
+                              ),
+                              const PopupMenuItem<FilterOptions>(
+                                value: FilterOptions.done,
+                                child: Text("Done")
+                              ),
+                              const PopupMenuItem<FilterOptions>(
+                                value: FilterOptions.undone,
+                                child: Text("Undone")
+                              )
+                            ]
+                          )
                         ]
                       )
                     ),
