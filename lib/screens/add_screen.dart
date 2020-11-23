@@ -1,14 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:gushenrfa/cards.dart';
-import 'package:gushenrfa/main.dart';
 
-class AddScreen extends StatelessWidget {
-  AddScreen(this.cardManager);
+import '../data_handler.dart';
 
-  final CardManager cardManager;
+class AddScreen extends StatefulWidget {
+  final DataHandler dataHandler;
+
+  AddScreen(this.dataHandler);
+
+
+  @override
+  _AddScreenState createState() => _AddScreenState();
+}
+
+class _AddScreenState extends State<AddScreen> {
+
+  TextEditingController _inputController = TextEditingController();
 
   void _onAddButtonPressed() {
-    cardManager.addCard('title');
+    setState(() {
+      widget.dataHandler.todos.add(Todo(title: _inputController.text));
+    });
   }
 
   @override
@@ -21,12 +32,14 @@ class AddScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextField(
+              controller: _inputController,
+              autofocus: true,
               decoration: InputDecoration(
                 hintText: 'What to do?'
               ),
             ),
             RaisedButton(
-              color: Color(0xFF2296F3),
+              color: Theme.of(context).primaryColor,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -40,7 +53,10 @@ class AddScreen extends StatelessWidget {
                   )
                 ],
               ),
-              onPressed: _onAddButtonPressed,
+              onPressed: () {
+                _onAddButtonPressed();
+                Navigator.pop(context);
+              },
               
             )
           ],
