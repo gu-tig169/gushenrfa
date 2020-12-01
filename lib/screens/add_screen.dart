@@ -1,26 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../data_handler.dart';
 
 class AddScreen extends StatefulWidget {
-  final DataHandler dataHandler;
-
-  AddScreen(this.dataHandler);
-
-
   @override
   _AddScreenState createState() => _AddScreenState();
 }
 
 class _AddScreenState extends State<AddScreen> {
-
-  TextEditingController _inputController = TextEditingController();
-
-  void _onAddButtonPressed() {
-    setState(() {
-      widget.dataHandler.todos.add(Todo(title: _inputController.text));
-    });
-  }
+  TextEditingController _inputController = TextEditingController()..text = '';
 
   @override
   Widget build(BuildContext context) {
@@ -34,19 +23,14 @@ class _AddScreenState extends State<AddScreen> {
             TextField(
               controller: _inputController,
               autofocus: true,
-              decoration: InputDecoration(
-                hintText: 'What to do?'
-              ),
+              decoration: InputDecoration(hintText: 'What to do?'),
             ),
             RaisedButton(
               color: Theme.of(context).primaryColor,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.add,
-                    color: Colors.white
-                  ),
+                  Icon(Icons.add, color: Colors.white),
                   Text(
                     'Add',
                     style: TextStyle(color: Colors.white),
@@ -54,20 +38,18 @@ class _AddScreenState extends State<AddScreen> {
                 ],
               ),
               onPressed: () {
-                _onAddButtonPressed();
+                Provider.of<TodoProvider>(context, listen: false).addTodo(_inputController.text);
                 Navigator.pop(context);
               },
-              
             )
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.keyboard_return),
-        onPressed: () {
-          Navigator.pop(context);
-        }
-      ),
+          child: Icon(Icons.keyboard_return),
+          onPressed: () {
+            Navigator.pop(context);
+          }),
     );
   }
 }
