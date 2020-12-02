@@ -14,7 +14,6 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => TodoProvider(todoDataSource: TodoDataSource.api),
       builder: (context, child) => MaterialApp(
-        title: 'Todo App',
         theme: ThemeData(
           primarySwatch: Colors.green,
           visualDensity: VisualDensity.adaptivePlatformDensity,

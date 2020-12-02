@@ -35,7 +35,6 @@ enum TodoDataSource { test, api, passed }
 class TodoProvider extends ChangeNotifier {
   TodoDataSource _todoDataSource;
   List<Todo> _todos = [];
-  List<Todo> _displayedTodos;
   FilterOptions _currentFilterOption = FilterOptions.all;
 
   TodoProvider({@required todoDataSource, List<Todo> todos}) {
@@ -54,22 +53,6 @@ class TodoProvider extends ChangeNotifier {
         fetchTodosFromAPI();
         break;
     }
-    _updateDisplayedTodos();
-  }
-
-  void _updateDisplayedTodos() {
-    switch (_currentFilterOption) {
-      case FilterOptions.all:
-        _displayedTodos = _todos;
-        break;
-      case FilterOptions.done:
-        _displayedTodos = _todos.where((todo) => todo.isChecked).toList();
-        break;
-      case FilterOptions.undone:
-        _displayedTodos = _todos.where((todo) => !todo.isChecked).toList();
-        break;
-    }
-    notifyListeners();
   }
 
   void fetchTodosFromAPI() async {
@@ -79,7 +62,7 @@ class TodoProvider extends ChangeNotifier {
       todosFromJson.add(Todo.fromJson(Map.from(json[i])));
     }
     _todos = todosFromJson;
-    _updateDisplayedTodos();
+    notifyListeners();
   }
 
   // Metoder för enskilda todos //
@@ -88,28 +71,43 @@ class TodoProvider extends ChangeNotifier {
     Todo todo = Todo(title: title);
     if (_todoDataSource == TodoDataSource.api) TodoAppAPI.postTodo(todo);
     _todos.add(todo);
-    _updateDisplayedTodos();
+    notifyListeners();
   }
 
   void removeTodo(Todo todo) {
     if (_todoDataSource == TodoDataSource.api) TodoAppAPI.deleteTodo(todo);
     _todos.remove(todo);
-    _updateDisplayedTodos();
+    notifyListeners();
   }
 
   void checkUncheckTodo(Todo todo, bool isChecked) {
     _todos[_todos.indexOf(todo)].isChecked = isChecked;
     if (_todoDataSource == TodoDataSource.api) TodoAppAPI.putTodo(todo);
-    _updateDisplayedTodos();
+    notifyListeners();
   }
 
   // Getters & Setters //
 
+  List<Todo> filteredTodos() {
+    List<Todo> result = [];
+    switch (_currentFilterOption) {
+      case FilterOptions.all:
+        result = _todos;
+        break;
+      case FilterOptions.done:
+        result = _todos.where((todo) => todo.isChecked).toList();
+        break;
+      case FilterOptions.undone:
+        result = _todos.where((todo) => !todo.isChecked).toList();
+        break;
+    }
+    return result;
+  }
+
   List<Todo> get todos => _todos;
-  List<Todo> get displayedTodos => _displayedTodos;
 
   set currentFilterOptions(FilterOptions filterOption) {
     _currentFilterOption = filterOption;
-    _updateDisplayedTodos();
+    notifyListeners();
   }
 }

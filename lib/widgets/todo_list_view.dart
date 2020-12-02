@@ -12,13 +12,9 @@ class TodoListView extends StatelessWidget {
       child: Consumer<TodoProvider>(
         builder: (context, state, child) => ListView.separated(
           itemBuilder: (context, index) => Container(
-            child: TodoCard(
-                todo: state.displayedTodos[index],
-                onDelete: () {
-                  state.removeTodo(state.displayedTodos[index]);
-                }),
+            child: TodoCard(todo: state.filteredTodos()[index]),
           ),
-          itemCount: state.displayedTodos.length,
+          itemCount: state.filteredTodos().length,
           separatorBuilder: (context, index) =>
               Divider(color: Theme.of(context).scaffoldBackgroundColor),
         ),

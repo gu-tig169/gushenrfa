@@ -5,9 +5,8 @@ import '../data_handler.dart';
 
 class TodoCard extends StatefulWidget {
   final Todo todo;
-  final void Function() onDelete;
 
-  TodoCard({this.todo, this.onDelete});
+  TodoCard({this.todo});
 
   @override
   _TodoCardState createState() => _TodoCardState();
