@@ -24,7 +24,7 @@ class _ListScreenState extends State<ListScreen> with SingleTickerProviderStateM
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Todo app"),
+        title: Text("Todo App: gushenrfa"),
         actions: [
           RotationTransition(
             turns: Tween(begin: 0.0, end: 40.0).animate(_animationController),
